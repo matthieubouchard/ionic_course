@@ -1,0 +1,13 @@
+label, input, button {
+  display: block;
+  margin-left: 4em;
+  margin-bottom: 2em;
+}
+
+button {
+  display: block;
+  width: 200px;
+  height: 100px;
+  color: purple;
+  background-color: yellow;
+}
