@@ -1,6 +1,10 @@
+<p *ngIf="isFetching">loading...</p>
+
 <ul>
-    <!-- <li *ngFor="let person of personList">
-        {{ person }}
-    </li> -->
-    {{"personList.map((person)"}}
+  <li 
+    *ngFor="let person of peopleList"
+    (click)="removePerson(person)"
+  >
+    {{person}}
+  </li>
 </ul>

@@ -1,22 +1,43 @@
-import { Component } from '@angular/core';
-import { PersonsService } from './persons.service';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
+
+import { PeopleService } from "./persons.service";
 
 @Component({
-  selector: 'app-persons',
-  templateUrl: './persons.component.html',
-  styleUrls: ['./persons.component.css'],
+  selector: "Persons",
+  templateUrl: "./persons.component.html",
+  styleUrls: ["./persons.component.css"]
 })
+export class PersonsComponent implements OnInit, OnDestroy {
+  // @Input() peopleList: string[];  can be found from app
+  private peopleListSubs: Subscription;
 
-export class PersonsComponent implements OnInit {
-  personList: string[];
-  private prsService: PersonsService;
+  peopleList: string[];
+  isFetching: boolean = false;
+  // private prsService: PeopleService;
 
-  constructor(prsService: PersonsService) {
-    this.prsService = prsService;
+  constructor(private prsService: PeopleService) {
+    // this.peopleList = prsService.people;
+  }
+
+  removePerson(name: string) {
+    this.prsService.removePerson(name);
   }
 
   ngOnInit() {
-    this.personList = this.prsService.persons;
+    // this.peopleListSubs.fetchPeople();
+    // this.peopleList = this.prsService.people;
+    this.peopleListSubs = this.prsService.peopleChanged.subscribe(people => {
+      this.peopleList = people;
+      this.isFetching = false;
+    });
+    this.isFetching = true;
+    this.prsService.fetchPeople();
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.peopleListSubs.unsubscribe();
+  }
 }
